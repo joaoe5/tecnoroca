@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	    <f:viewParam name="id" value="#{producaoController.idAnimal}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel style="font-size: 25px">Produção</p:outputPanel>
+	</ui:define>
+		
+
+	<ui:define name="conteudo">
+	
+	<div class="ui-g-12 ui-md-12">
+	<h:form id="formProducao">
+	<p:commandButton value="Voltar" action="#{animalController.formAnimal}" immediate="true" />
+	<p:messages id="messages" style=" color : red"/>
+	
+	<center>	
+	<p:fieldset legend="Cadastro de nova Produção" style = "width: 45%; margin: 0px auto;">
+	<div class = "ui-fluid">
+	<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-widget-header">	
+		<p:outputLabel value="Quantidade" for="quantidade" />
+		<p:inputText id="quantidade" value="#{producaoController.producao.quantidade}"/>
+		
+		<p:outputLabel value="Produto"/>
+	  		<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+	  			<p:selectOneMenu id="produto" value="#{producaoController.idProduto}"
+	  			required="true" requiredMessage="Produto Obrigatório.">
+	  				<f:selectItem itemLabel="Selecione um Produto" noSelectionOption="true"/>
+	  				<f:selectItems value="#{produtoController.produtos}" 
+	  			var="varProduto" itemLabel="#{varProduto.nome}" itemValue="#{varProduto.id}"/>
+	  			</p:selectOneMenu>
+	  		
+	  		<p:commandLink value="Cadastrar novo Produto" style="color : blue" action="#{producaoController.redirecionaProduto(producaoController.idAnimal)}" process="@this" update="@form" immediate="true"/>
+	  		
+	  		</p:panelGrid>	
+	
+		<p:outputLabel value="Data da produção" for="dataProducao"/>
+	   	<p:calendar id="dataProducao" value="#{producaoController.producao.dataProducao.time}"
+	   		pattern="dd/MM/yyyy" 
+	   		timeZone="America/Sao_Paulo" 
+	   		navigator="true"> 
+		</p:calendar>
+		</p:panelGrid>
+		</div>
+		
+		<center>
+			<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+				<p:commandButton value="Gravar" action="#{producaoController.gravar(producaoController.producao)}" process="@form" 
+	  		update="@form :formTabelaProducoes:tabelaProducoes"/>
+			</p:panelGrid>
+		</center>
+	
+	</p:fieldset>
+	</center>
+	</h:form>
+	</div>
+	 
+	<h:form id="formTabelaProducoes">
+		<p:dataTable id="tabelaProducoes" value="#{producaoController.producoesId}" var="varProducao"  reflow="true" rows="10" paginator="true">
+			<p:column headerText="Quantidade">
+	  			<h:outputText value="#{varProducao.quantidade}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Medida">
+	  			<h:outputText value="#{varProducao.produto.unidadeQtde}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Produto">
+	  			<h:outputText value="#{varProducao.produto.nome}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Data produção">
+	   			<h:outputText value="#{varProducao.dataProducao.time}">
+	   				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+				</h:outputText>	
+	   		</p:column>
+	   		  
+	   		<p:column headerText="Animal associado">
+	  			<h:outputText value="#{varProducao.animal.identificacao}"/>
+	  		</p:column>
+			
+			<p:column headerText="Atualizar">
+				<p:commandLink value="Atualizar" style="color : blue" action="#{producaoController.carregar(varProducao)}" process="@form" update="@form :formProducao"/>			
+			</p:column>
+			
+			<p:column headerText="Remover">
+				<p:commandLink value="Remover" style="color : red" action="#{producaoController.remover(varProducao)}" process="@this" update="@form" />			
+			</p:column>
+			
+		</p:dataTable>	
+	</h:form> 
+	
+	</ui:define>
+</ui:composition>
+
+</html>

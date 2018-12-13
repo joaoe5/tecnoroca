@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	 xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	   <f:viewParam name="id" value="#{racaController.raca.id}"/>
+	</f:metadata>
+	
+		<ui:define name="titulo">
+			<p:outputPanel style="font-size: 25px">Raça Animal</p:outputPanel> 
+		</ui:define>
+		<ui:define name="conteudo">
+		
+	<div class="ui-g-12 ui-md-12">
+	<h:form id="formRaca">
+		<p:commandButton value="Voltar" action="#{animalController.formAnimal}" immediate="true"/>
+		<p:messages id="messages" style=" color : red"/>
+		
+		<center>
+	  	<p:fieldset legend="Cadastro de nova raça" style = "width: 40%; margin: 0px auto;">
+	  	<div class = "ui-fluid">	  	
+	  	<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-4" layout="grid" styleClass="ui-widget-header">
+	  	
+	  	<p:outputLabel value="Nome: " for="nome"/>
+	  	<p:inputText id="nome" value="#{racaController.raca.nome}" required="true" requiredMessage="Nome obrigatório."/>
+	  	
+	  	<p:outputLabel value="Descrição:" for="descricao" />
+	  	<p:inputText id="descricao"  value="#{racaController.raca.descricao}" />
+	  	
+	  	<p:outputLabel value="Tipo"/>
+	  	<p:selectOneMenu id="tipo" value="#{racaController.idTipo}" required="true" requiredMessage="Tipo Obrigatório.">
+	  			<f:selectItem itemLabel="Selecione um Tipo" noSelectionOption="true"/>
+	  			<f:selectItems value="#{racaController.todosTipos}" var="varTipo" itemLabel="#{varTipo.nome}" itemValue="#{varTipo.id}"/>
+	  	</p:selectOneMenu>  	
+	  	</p:panelGrid>
+	  	</div>
+	  	
+	  	<center>
+	  	<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+	  		<h:commandButton value="Gravar" action="#{racaController.gravar}" 
+	  		process="@form" 
+	  		update="@form :formTabelaRacas:tabelaRacas"/>
+	  	</p:panelGrid>
+	  	</center>
+	  	
+	  	
+	  	</p:fieldset>
+	  	</center>
+	  	</h:form>
+	  	</div>
+	  	
+	  	<h:form id="formTabelaRacas">
+	  	
+	  	<p:dataTable id="tabelaRacas" value="#{racaController.racas}" var="raca" reflow="true" rows="10" paginator="true">
+	  		<p:column headerText="Nome">
+	  			<p:outputLabel value="#{raca.nome}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Descrição">
+	  			<p:outputLabel value="#{raca.descricao}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Tipo Associado">
+	  			<p:outputLabel value="#{raca.tipo.nome}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Alimentação">
+	  			<p:commandLink value="Alimentação" style="color : blue" action="#{racaController.redirecionaAlimentacao(raca)}" process="@this" update="@form"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Atualizar">
+	  			<p:commandLink value="Atualizar" style="color : blue" action="#{racaController.carregar(raca)}" 
+	  			process="@form" update="@form :formRaca"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Remover">
+	  			<h:commandLink value="Remover" style="color : red" action="#{racaController.remover(raca)}" />
+	  		</p:column>
+	  		
+	  	</p:dataTable>
+	  	</h:form>
+	  	
+	</ui:define>
+	</ui:composition>
+</html>

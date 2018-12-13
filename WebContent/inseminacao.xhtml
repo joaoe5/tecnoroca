@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	    <f:viewParam name="id" value="#{inseminacaoController.idAnimal}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel style="font-size: 25px">Inseminação - Cio</p:outputPanel>
+	</ui:define>
+	
+	<ui:define name="conteudo">
+	
+	<div class="ui-g-12 ui-md-12">
+	<h:form id="formInseminacao">
+		<p:commandButton value="Voltar" action="#{animalController.formAnimal}" process="@this" update="@form" immediate="true"/>
+		<p:messages id="messages" style=" color : red"/>
+	
+	<center>
+	<p:fieldset legend="Cadastro de Nova Inseminacao/Cio" style = "width: 40%; margin: 0px auto;">
+	<div class = "ui-fluid">
+	<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-widget-header">
+	
+		<p:outputLabel value="Data da Inseminacao" for="dataInseminacaoCio"/>
+	   	<p:calendar id="dataInseminacaoCio" value="#{inseminacaoController.inseminacao.dataInseminacaoCio.time}"
+			pattern="dd/MM/yyyy" 
+			timeZone="America/Sao_Paulo"
+			navigator="true">
+		</p:calendar>
+		
+		<p:outputLabel value="Data do Nascimento" for="dataNascimento"/>
+	   	<p:calendar id="dataNascimento" value="#{inseminacaoController.inseminacao.dataNascimento.time}"
+			 pattern="dd/MM/yyyy" 
+			 timeZone="America/Sao_Paulo"
+			 navigator="true">
+		</p:calendar>
+		
+		<p:outputLabel value="Observação" for="observacao" />
+			<p:inputText id="observacao" value="#{inseminacaoController.inseminacao.observacao}"/>
+		</p:panelGrid>
+		</div>
+		
+		<center>
+		<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+			<p:commandButton value="Gravar" action="#{inseminacaoController.gravar(inseminacaoController.inseminacao)}"
+				process="@form" 
+				update="@form :formTabelaInseminacoes:tabelaInseminacoes"/>
+		</p:panelGrid>
+		</center>
+	
+	</p:fieldset>
+	</center>
+	</h:form>
+	</div>
+	 
+	<h:form id="formTabelaInseminacoes">
+		<p:dataTable id="tabelaInseminacoes" value="#{inseminacaoController.inseminacoesId}" var="varInseminacao" reflow="true" rows="10" paginator="true">
+			<p:column headerText="Data inseminação">
+	   			<p:outputLabel value="#{varInseminacao.dataInseminacaoCio.time}">
+	   				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+				</p:outputLabel>	
+	   		</p:column>
+	  		
+	  		<p:column headerText="Data nascimento">
+	   			<p:outputLabel value="#{varInseminacao.dataNascimento.time}">
+	   				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+				</p:outputLabel>	
+	   		</p:column>
+	   		
+	   		<p:column headerText="Observação">
+				<p:outputLabel value="#{varInseminacao.observacao}" />			
+			</p:column>
+			
+			<p:column headerText="Atualizar">
+				<p:commandLink value="Atualizar" style="color : blue" action="#{inseminacaoController.carregar(varInseminacao)}" process="@this" update="@form :formInseminacao" />			
+			</p:column>
+			
+			<p:column headerText="Remover">
+				<p:commandLink value="Remover" style="color : red" action="#{inseminacaoController.remover(varInseminacao)}" process="@this" update="@form"/>			
+			</p:column>
+			
+		</p:dataTable>	
+	</h:form> 
+	
+	</ui:define>
+</ui:composition>
+
+</html>

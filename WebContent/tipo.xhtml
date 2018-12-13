@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+	<ui:composition template="_template.xhtml">
+
+		<ui:define name="titulo">
+			Tipo Animal
+		</ui:define>
+		<ui:define name="conteudo">
+	
+	<h:form>
+		<h:commandButton value="Voltar" action="#{animalController.formAnimal}" immediate="true"/>
+		<h:messages id="messages" style=" color : red"/>
+		
+	  	<fieldset>
+	  	
+	  	<legend>Cadastro de novo tipo</legend>
+	  	
+	  	<!--  <h:inputHidden value="#{tipoController.tipo.id}"/> -->
+	  	
+	  	<h:panelGrid columns="2">
+	  	
+	  	<h:outputText value="Nome: " for="nome"/>
+	  	<h:inputText id="nome" value="#{tipoController.tipo.nome}" required="true" requiredMessage="Nome obrigatório."/>
+	  	
+	  	<!--<h:message for="nome"/> -->
+	  	</h:panelGrid>
+	  	<h:panelGrid columns="2">
+	  	
+	  	<h:outputText value="Tempo de gestação: " for="tempo_gestacao" />
+	  	<h:inputText id="tempo_gestacao" size="3" value="#{tipoController.tipo.tempo_gestacao}" required="true" requiredMessage="Tempo de gestação obrigatório."/>
+	  	
+	  	<h:outputText value="Unidade do tempo de gestação:" for="unidade_gestacao" />
+		<h:selectOneRadio id="unidade_gestacao" value="#{tipoController.tipo.unidade_gestacao}" required="true" requiredMessage="Unidade de gestação obrigatória.">
+			<f:selectItems value="#{tipoController.unidadeGestacao}" var="varUnidade" itemLabel="#{varUnidade}" itemValue="#{varUnidade}" />
+		</h:selectOneRadio>
+	  	<!--  
+	  	<h:outputText value="Unidade do tempo de gestação: " for="unidade_gestacao"/>
+	  	<h:inputText id="unidade_gestacao" value="#{tipoController.tipo.unidade_gestacao}" required="true" requiredMessage="Unidade de gestação obrigatória."/>
+	  	-->
+	  	
+	  	<h:commandButton value="Gravar" action="#{tipoController.gravar}"/>
+	  	
+	  	</h:panelGrid>
+	  	</fieldset>
+	  	</h:form>
+	  	
+	  	<h:form id="formTabelaTipos">
+	  	
+	  	<h:dataTable id="tabelaTipos" value="#{tipoController.tiposId}" var="tipo">
+	  		<h:column>
+	  			<f:facet name="header">Nome</f:facet>
+	  			<h:outputText value="#{tipo.nome}"/>
+	  		</h:column>
+	  		
+	  		<h:column>
+	  			<f:facet name="header">Tempo de gestação</f:facet>
+	  			<h:outputText value="#{tipo.tempo_gestacao}"/>
+	  		</h:column>
+	  		
+	  		<h:column>
+	  			<f:facet name="header">Unidade do tempo de gestação</f:facet>
+	  			<h:outputText value="#{tipo.unidade_gestacao}"/>
+	  		</h:column>
+	  		
+	  		<h:column>
+	  			<f:facet name="header">Atualizar</f:facet>
+	  			<h:commandLink value="Atualizar" action="#{tipoController.carregar(tipo)}"/>
+	  		</h:column>
+	  		
+	  		<h:column>
+	  			<f:facet name="header">Remover</f:facet>
+	  			<h:commandLink value="Remover" action="#{tipoController.remover(tipo)}"/>
+	  		</h:column>
+	  		
+	  	</h:dataTable>
+	  	</h:form>
+	  	
+	</ui:define>
+	</ui:composition>
+</html>

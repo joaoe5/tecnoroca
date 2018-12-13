@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	    <f:viewParam name="id" value="#{medicacaoController.idAnimal}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel style="font-size: 25px">Medicação</p:outputPanel>
+	</ui:define>
+	<ui:define name="conteudo">
+	
+	<div class="ui-g-12">
+	<h:form id="formMedicacao">
+		<p:commandButton value="Voltar" action="#{animalController.formAnimal}" process="@this" update="@form" immediate="true" />
+		<p:messages id="messages" style=" color : red"/>
+	
+	<center>
+	<p:fieldset legend="Cadastro de Nova Medicação" style = "width: 45%; margin: 0px auto;">
+		<div class = "ui-fluid">
+		<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-widget-header">	
+			<p:outputLabel value="Observação" for="observacao" />
+			<p:inputText id="observacao" value="#{medicacaoController.medicacao.observacao}"/>
+			
+			<p:outputLabel value="Medicamento"/>
+		  		<p:panelGrid columns="2" styleClass="ui-panelgrid-blank">
+		  			<p:selectOneMenu id="medicamento" value="#{medicacaoController.idMedicamento}"
+		  			required="true" requiredMessage="Medicamento Obrigatório.">
+		  				<f:selectItem itemLabel="Selecione um medicamento" noSelectionOption="true"/>
+		  				<f:selectItems value="#{medicamentoController.medicamentos}" 
+		  				var="varMedicamento" itemLabel="#{varMedicamento.nome}" itemValue="#{varMedicamento.id}"/>
+		  			</p:selectOneMenu>
+		  		
+		  			<p:commandLink value="Cadastrar novo Medicamento" style="color : blue" action="#{medicacaoController.redirecionaMedicamento(medicacaoController.idAnimal)}" process="@this" update="@form" immediate="true"/>
+		  		
+		  		</p:panelGrid>
+			
+			<p:outputLabel value="Data da Aplicação" for="dataMedicacao"/>
+		   	<p:calendar id="dataMedicacao" value="#{medicacaoController.medicacao.dataMedicacao.time}"
+				pattern="dd-MM-yyyy" 
+				timeZone="America/Sao_Paulo"
+				navigator="true">
+			</p:calendar>
+		</p:panelGrid>
+		</div>
+		
+		<center>
+		<p:panelGrid column="1" styleClass="ui-panelgrid-blank">
+			<p:commandButton value="Gravar" action="#{medicacaoController.gravar(medicacaoController.medicacao)}" process="@form" 
+	  		update="@form :formTabelaMedicacoes:tabelaMedicacoes" />
+		</p:panelGrid>
+		</center>
+	
+	</p:fieldset>
+	</center>
+	</h:form>
+	</div>
+	 
+	<h:form id="formTabelaMedicacoes">
+		<p:dataTable id="tabelaMedicacoes" value="#{medicacaoController.medicacoesId}" var="varMedicacao" reflow="true" rows="10" paginator="true">
+		
+			<p:column headerText="Animal Associado">
+	  			<p:outputLabel value="#{varMedicacao.animal.identificacao}"/>
+	  		</p:column>
+	  		
+			<p:column headerText="Observação">
+	  			<h:outputLabel value="#{varMedicacao.observacao}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Medicamento">
+	  			<h:outputLabel value="#{varMedicacao.medicamento.nome}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Data medicação">
+	   			<p:outputLabel value="#{varMedicacao.dataMedicacao.time}">
+	   				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+				</p:outputLabel>	
+	   		</p:column>
+			
+			<p:column headerText="Atualizar">
+				<p:commandLink value="Atualizar" style="color : blue" action="#{medicacaoController.carregar(varMedicacao)}" process="@this" update="@form :formMedicacao"/>			
+			</p:column>
+			
+			<p:column headerText="Remover">
+				<p:commandLink value="Remover" style="color : red" action="#{medicacaoController.remover(varMedicacao)}" process="@this" update="@form"/>			
+			</p:column>
+			
+		</p:dataTable>	
+	</h:form> 
+	
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+		
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	   <f:viewParam name="id" value="#{animalController.animal.id}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+		<p:outputPanel style="font-size: 25px">Tela - Animais</p:outputPanel>
+	</ui:define>
+	
+	<ui:define name="conteudo">
+	
+	<!--  <iframe frameborder="0" allowtransparency="yes" scrolling="no" width="150" height="260" src="http://www.tempoagora.com.br/ta-widgets?cidades=Muzambinho-MG&amp;tipo=vertical"></iframe>-->
+	<div class="ui-g">
+		<div class="ui-g-12 ui-md-12">
+	<h:form id="formAnimais">
+		<p:commandButton value="Voltar" action="#{principalController.formPrincipal}"  immediate="true"/>
+		<p:messages id="messages" style=" color : red"/>
+	
+	<center>
+	<p:fieldset legend="Cadastro de novo Animal" style = "width: 40%; margin: 0px auto;">
+		
+	<center>
+	<div  class = "ui-fluid">
+	<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-widget-header">
+		<p:outputLabel value="Identificação" for="identificacao" />
+		<p:inputText id="identificacao" value="#{animalController.animal.identificacao}"  required="true" requiredMessage="Identificação obrigatória." />
+		
+		<p:outputLabel value="Tipo"/>
+	  	<p:selectOneMenu id="comboTipo" value="#{animalController.idTipo}"
+	  		required="true" requiredMessage="Tipo Obrigatório.">
+	  		<f:selectItem itemLabel="Selecione um Tipo" noSelectionOption="true"/>
+	  		<f:selectItems value="#{racaController.todosTipos}" 
+	  		var="varTipo" itemLabel="#{varTipo.nome}" itemValue="#{varTipo.id}"/>
+	  		<f:ajax execute="comboTipo" render="comboRaca"/>
+	 	</p:selectOneMenu>
+	  	 
+	  	
+	  	<p:outputLabel value="Raças"/>
+	  	<p:panelGrid columns="2" styleClass="ui-panelgrid-blank"> 
+			
+	  		<p:selectOneMenu id="comboRaca" value="#{animalController.idRaca}" required="true" requiredMessage="Raça Obrigatória." filter="true">
+	  			<f:selectItem itemLabel="Selecione uma Raça" noSelectionOption="true"/>
+	  			<f:selectItems value="#{animalController.racaUsuario}" var="varRaca" itemLabel="#{varRaca.nome}" itemValue="#{varRaca.id}"/>
+	  			<!--  <f:ajax event="blur" render="messages"/> -->
+	  		</p:selectOneMenu> 
+	  		
+	  		<p:commandLink value="Cadastrar nova raça" style="color : blue" action="#{racaController.formRaca}" immediate="true"/>
+	  		 
+	  	</p:panelGrid>
+		
+		<p:outputLabel value="Genero" for="genero" />
+		<p:selectOneRadio id="genero" value="#{animalController.animal.genero}" required="true" requiredMessage="Gênero obrigatório.">
+			<f:selectItems value="#{animalController.generos}" var="varGenero" itemLabel="#{varGenero}" itemValue="#{varGenero}" />
+		</p:selectOneRadio>
+		
+		<p:outputLabel value="Pai" for="pai" />
+		<p:inputText id="pai" value="#{animalController.animal.pai}"/>
+		
+		<p:outputLabel value="Mãe" for="mae" />
+		<p:inputText id="mae" value="#{animalController.animal.mae}" />
+		
+		<p:outputLabel value="Origem" for="origem" />
+		<p:inputText id="origem" value="#{animalController.animal.origem}" />
+		
+		<p:outputLabel value="Data do Nascimento" for="nascimento"/>
+	   		<p:calendar id="nascimento"
+	   		value="#{animalController.animal.nascimento.time}"  
+	   		pattern="dd/MM/yyyy" 
+	   		timeZone="America/Sao_Paulo" 
+	   		navigator="true"> 
+			</p:calendar>
+		</p:panelGrid>
+		</div>
+		</center>
+		
+		<center>
+			<p:commandButton value="Gravar" action="#{animalController.gravar(animalController.animal)}" 
+			process="@form" 
+	  		update="@form :formTabelaAnimais:tabelaAnimais">
+	  			<f:ajax execute="idTipo idRaca" render="@form"/>
+	  		</p:commandButton>
+		</center>
+		
+		
+	</p:fieldset>
+	</center>
+	</h:form>
+	</div>
+	</div>
+	
+	 
+	 <h:form id="formTabelaAnimais">
+		<p:dataTable id="tabelaAnimais" value="#{animalController.animaisId}" var="varAnimal" reflow="true" rows="10" paginator="true">
+			
+			<p:column headerText="Identificação" filterBy="#{varAnimal.identificacao}">
+				<p:outputLabel value="#{varAnimal.identificacao}"/>			
+			</p:column>
+			
+			<p:column headerText="Gênero">
+				<p:outputLabel value="#{varAnimal.genero}" />			
+			</p:column>
+			
+			<p:column headerText="Tipo">
+	  			<p:outputLabel value="#{varAnimal.raca.tipo.nome}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Raça">
+	  			<p:outputLabel value="#{varAnimal.raca.nome}"/>
+	  		</p:column>
+			
+			<p:column headerText="Pai">
+				<p:outputLabel value="#{varAnimal.pai}" />			
+			</p:column>
+			
+			<p:column headerText="Mãe">
+				<p:outputLabel value="#{varAnimal.mae}" />			
+			</p:column>
+			
+			<p:column headerText="Origem">
+				<p:outputLabel value="#{varAnimal.origem}" />			
+			</p:column>
+			
+			<p:column headerText="Nascimento">
+	   			<p:outputLabel value="#{varAnimal.nascimento.time}">
+	   				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+				</p:outputLabel>	
+	   		</p:column>
+			
+			<p:column headerText="Produção">
+				<p:commandLink value="Produção" style="color : blue" action="#{animalController.redirecionaProducao(varAnimal)}" process="@this" update="@form"/>			
+			</p:column>
+			
+			<p:column headerText="Medicação">
+				<p:commandLink value="Medicação" style="color : blue" action="#{animalController.redirecionaMedicacao(varAnimal)}" process="@this" update="@form"/>			
+			</p:column>
+			
+			<p:column headerText="Inseminação">
+				<p:commandLink value="Inseminação" style="color : blue" action="#{animalController.redirecionaInseminacao(varAnimal)}" process="@this" update="@form"/>			
+			</p:column>
+			
+			<p:column headerText="Atualizar">
+				<p:commandLink value="Atualizar" style="color : blue" action="#{animalController.carregar(varAnimal)}" process="@form" update="@form :formAnimais" />			
+			</p:column>
+	
+			<p:column headerText="Remover">
+				<h:commandLink value="Remover" style="color : red" action="#{animalController.remover(varAnimal)}" process="@this" update="@form" 
+				 />			
+			</p:column>
+			
+		</p:dataTable>	
+	</h:form> 
+	
+	</ui:define>
+</ui:composition>
+
+</html>

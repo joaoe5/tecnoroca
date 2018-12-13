@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	    <f:viewParam name="id" value="#{alimentacaoController.idRaca}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+			<p:outputPanel style="font-size: 25px">Alimentação</p:outputPanel>
+		</ui:define>
+	<ui:define name="conteudo">
+	
+	<div class="ui-g-12 ui-md-12">
+	<h:form>
+		<p:commandButton value="Voltar" action="#{racaController.formRaca}" process="@this" update="@form" immediate="true" />
+		<p:messages id="messages" style=" color : red"/>
+	
+	<center>
+	<p:fieldset legend="Cadastro de Nova Alimentação" style = "width: 45%; margin: 0px auto;">
+	<div class = "ui-fluid">
+		<p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-widget-header">	
+			
+			<p:outputLabel value="Alimento"/>
+		  	<p:panelGrid columns="2" >
+		  		<p:selectOneMenu id="alimento" value="#{alimentacaoController.idAlimento}"
+		  		required="true" requiredMessage="Alimento Obrigatório.">
+		  			<f:selectItem itemLabel="Selecione uma alimento" noSelectionOption="true"/>
+		  			<f:selectItems value="#{alimentoController.alimentos}" 
+		  			var="varAlimento" itemLabel="#{varAlimento.nome}" itemValue="#{varAlimento.id}"/>
+		  		</p:selectOneMenu>
+		  		
+		  		<p:commandLink value="Cadastrar novo Alimento" style="color : blue" action="#{alimentacaoController.redirecionaAlimento(alimentacaoController.idRaca)}" process="@this" update="@form" immediate="true"/>
+		  		
+		  	</p:panelGrid>
+			
+			<p:outputLabel value="Consumo diário médio por animal" for="consumo" />
+			<p:inputText id="consumo" value="#{alimentacaoController.alimentacao.consumo}"/>
+			
+			<p:outputLabel value="Unidade do consumo:" for="unidade_consumo" />
+			<p:selectOneRadio id="unidade_consumo" value="#{alimentacaoController.alimentacao.unidade_consumo}" required="true" requiredMessage="Unidade de consumo obrigatória.">
+				<f:selectItems value="#{alimentacaoController.unidadeConsumo}" var="varUnidade" itemLabel="#{varUnidade}" itemValue="#{varUnidade}" />
+			</p:selectOneRadio>
+			
+		</p:panelGrid>
+		</div>
+			
+			<center>
+			<p:panelGrid columns="1" styleClass="ui-panelgrid-blank">
+				<p:commandButton value="Gravar" action="#{alimentacaoController.gravar(alimentacaoController.alimentacao)}" 
+				process="@form" 
+				update="@form :formTabelaAlimentacoes:tabelaAlimentacoes"/>
+			</p:panelGrid>
+			</center>
+	
+	</p:fieldset>
+	</center>
+	</h:form>
+	</div>
+	 
+	<h:form id="formTabelaAlimentacoes">
+		<p:dataTable id="tabelaAlimentacoes" value="#{alimentacaoController.alimentacoesId}" var="varAlimentacao" reflow="true" rows="10" paginator="true">
+			<p:column headerText="Raça associada">
+	  			<p:outputLabel value="#{varAlimentacao.raca.nome}"/>
+	  		</p:column>
+			
+			<p:column headerText="Consumo diário">
+	  			<p:outputLabel value="#{varAlimentacao.consumo}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Unidade de Consumo">
+	  			<p:outputLabel value="#{varAlimentacao.unidade_consumo}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Alimento">
+	  			<p:outputLabel value="#{varAlimentacao.alimento.nome}"/>
+	  		</p:column>
+	  		
+			<p:column headerText="Atualizar">
+				<p:commandLink value="Atualizar" style="color : blue" action="#{alimentacaoController.carregar(varAlimentacao)}" process="@this" update="@form"/>			
+			</p:column>
+			
+			<p:column headerText="Remover">
+				<p:commandLink value="Remover" style="color : red" action="#{alimentacaoController.remover(varAlimentacao)}" process="@this" update="@form"/>			
+			</p:column>
+			
+		</p:dataTable>	
+	</h:form> 
+	
+	</ui:define>
+</ui:composition>
+
+</html>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	 xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	   <f:viewParam name="id" value="#{culturaController.cultura.id}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+			<p:outputPanel style="font-size: 25px">Cultura</p:outputPanel>
+	</ui:define>
+	<ui:define name="conteudo">
+	
+	<div class="ui-g-12 ui-md-12">
+	<h:form id="formCultura">
+		<p:commandButton value="Voltar" action="#{principalController.formPrincipal}"  immediate="true"/>
+		<p:messages id="messages" style=" color : red"/>
+	
+	<center>	
+	<p:fieldset legend="Cadastro de Nova Cultura" style = "width: 40%; margin: 0px auto;">
+	<div class = "ui-fluid">
+	<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-4" layout="grid" styleClass="ui-widget-header">
+		<p:outputLabel value="Identificação" for="identificacao" />
+		<p:inputText id="identificacao" value="#{culturaController.cultura.identificacao}"  required="true" requiredMessage="Identificação obrigatória." />
+		
+		<p:outputLabel value="Localização" for="localizacao" />
+		<p:inputText id="localizacao" value="#{culturaController.cultura.localizacao}" required="true" requiredMessage="Local obrigatório."/>
+		
+		<p:outputLabel value="Área em Alqueires" for="area" />
+		<p:inputText id="area" value="#{culturaController.cultura.area}"/>
+		
+		<p:outputLabel value="Custo Inicial - R$" for="custoIni" />
+		<p:inputText id="custoIni" value="#{culturaController.cultura.custoIni}" />
+		
+		<p:outputLabel value="Data do Plantio" for="plantio"/>
+	   	<p:calendar id="plantio" value="#{culturaController.cultura.plantio.time}"
+			pattern="dd/MM/yyyy" 
+			timeZone="America/Sao_Paulo"
+			navigator="true">
+		</p:calendar>
+	</p:panelGrid>
+	</div>
+		
+	<center>
+		<p:panelGrid columns="1" styleClass="ui-panelgrid-blank" >
+		<p:commandButton value="Gravar" action="#{culturaController.gravar(culturaController.cultura)}" 
+			process="@form"
+			update="@form :formTabelaCulturas:tabelaCulturas" />
+		</p:panelGrid>
+	</center>
+	
+	</p:fieldset>
+	</center>
+	</h:form>
+	</div>
+	 
+	<h:form id="formTabelaCulturas">
+		<p:dataTable id="tabelaCulturas" value="#{culturaController.culturasId}" var="cultura" reflow="true" rows="10" paginator="true">
+			<p:column headerText="Identificação" 
+				filterBy="#{varCultura.identificacao}">
+				<p:outputLabel value="#{cultura.identificacao}" />			
+			</p:column>
+			
+			<p:column headerText="Localização">
+				<p:outputLabel value="#{cultura.localizacao}" />			
+			</p:column>
+			
+			<p:column headerText="Área em Alqueires">
+	  			<p:outputLabel value="#{cultura.area}"/>
+	  		</p:column>
+			
+			<p:column headerText="Custo Inicial - R$">
+				<p:outputLabel value="#{cultura.custoIni}" />			
+			</p:column>
+			
+			<p:column headerText="Data do plantio">
+	   			<p:outputLabel value="#{cultura.plantio.time}">
+	   				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+				</p:outputLabel>	
+	   		</p:column>
+			
+			<p:column headerText="Atividades">
+				<p:commandLink value="Atividades" style="color : blue" action="#{culturaController.redirecionaAtividades(cultura)}" process="@this" update="@form" />			
+			</p:column>
+			
+			<p:column headerText="Atualizar">
+				<p:commandLink value="Atualizar" style="color : blue" action="#{culturaController.carregar(cultura)}" process="@this" update="@form :formCultura"/>			
+			</p:column>
+			
+			<p:column headerText="Remover">
+				<h:commandLink value="Remover" style="color : red" action="#{culturaController.remover(cultura)}"/>			
+			</p:column>
+			
+		</p:dataTable>	
+	</h:form> 
+	
+	</ui:define>
+</ui:composition>
+
+</html>

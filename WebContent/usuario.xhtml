@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+		<ui:define name="titulo">
+			<p:outputPanel style="font-size: 25px">Área Administrativa - Novo Usuário </p:outputPanel> 
+		</ui:define>
+	<ui:define name="conteudo">
+	
+	<div class="ui-g-12">
+	<h:form>
+	<p:commandButton value="Voltar" action="#{principalController.formPrincipal}"  immediate="true"/>
+	<p:messages id="messages" style=" color : red"/>
+	
+	<center>
+	<p:fieldset legend="Novo Usuário"  style = "width: 40%; margin: 0px auto;">
+	
+	<center>
+	<div class = "ui-fluid">
+	<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-widget-header" >
+		<p:outputLabel value="Nome" for="nome" />
+		<p:inputText id="nome" value="#{usuarioController.usuario.nome}" required="true" requiredMessage="Nome obrigatório." >
+			<f:ajax event="blur" render="messages"/>
+		</p:inputText>
+		
+		<p:outputLabel value="Sexo" for="sexo" />
+		<p:selectOneRadio id="sexo" value="#{usuarioController.usuario.sexo}" required="true" requiredMessage="Sexo obrigatório.">
+			<f:selectItems value="#{usuarioController.sexos}" var="varSexo" itemLabel="#{varSexo}" itemValue="#{varSexo}" />
+		</p:selectOneRadio>
+		
+		<p:outputLabel value="Celular" for="celular" />
+		<p:inputMask id="celular" value="#{usuarioController.usuario.celular}" required="true" requiredMessage="Celular obrigatório." mask="(99) 9 9999-9999" />
+		
+		<p:outputLabel value="Endereço" for="endereco" />
+		<p:inputText id="endereco" value="#{usuarioController.usuario.endereco}" required="true" requiredMessage="Endereço obrigatório."
+		validatorMessage="O endereço deve conter mais de 10 caracteres!"
+		>
+		<f:validateLength minimum="10"></f:validateLength>
+		</p:inputText>
+		
+		<p:outputLabel value="Cidade" for="cidade" />
+		<p:inputText id="cidade" value="#{usuarioController.usuario.cidade}" required="true" requiredMessage="Cidade obrigatória." />
+		
+		<p:outputLabel value="Estado" for="uf" />
+		<p:inputMask id="uf" value="#{usuarioController.usuario.uf}" required="true" requiredMessage="Estado obrigatório." mask="aa"/>
+		
+		<p:outputLabel value="Login" for="login" />
+		<p:inputText id="login" value="#{usuarioController.usuario.login}" required="true" requiredMessage="Login obrigatório."/>
+		
+		<p:outputLabel value="Senha" for="senha" />
+		<p:inputText id="senha" value="#{usuarioController.usuario.senha}" required="true" requiredMessage="Senha obrigatória." 
+		validator="#{usuarioController.senhaMaiorque8}"
+		>
+		</p:inputText>
+		
+		<p:outputLabel value="Grupo"/>
+	  	<p:selectOneMenu id="grupo" value="#{usuarioController.idGrupo}" required="true" requiredMessage="Grupo Obrigatório.">
+	  			<f:selectItem itemLabel="Selecione um Grupo" noSelectionOption="true"/>
+	  			<f:selectItems value="#{usuarioController.todosGrupos}" var="varUsuario" itemLabel="#{varUsuario.nome}" itemValue="#{varUsuario.id}"/>
+	  	</p:selectOneMenu>
+	  	</p:panelGrid>
+	  	</div>
+		</center>
+		
+		<center>
+		<p:panelGrid columns="1" styleClass="ui-panelgrid-blank" >
+		<h:commandButton value="Gravar" action="#{usuarioController.gravar(usuarioController.usuario)}">
+		</h:commandButton>
+		<p:commandLink value="Todos usuários" style=" color : blue" action="#{usuarioController.formAdm}" immediate="true"/>
+		</p:panelGrid>
+		</center>
+	</p:fieldset>
+	</center>
+		
+	</h:form>
+	</div>
+	</ui:define>
+</ui:composition>
+
+</html>

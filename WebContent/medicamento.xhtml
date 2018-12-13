@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://xmlns.jcp.org/jsf/html"
+   	  xmlns:f="http://xmlns.jcp.org/jsf/core"
+	  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	  xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="_template.xhtml">
+	
+	<h:outputStylesheet library="primefaces" name="grid/grid.css" />
+	
+	<f:metadata>
+	    <f:viewParam name="id" value="#{medicacaoController.idAnimal}"/>
+	</f:metadata>
+
+	<ui:define name="titulo">
+			<p:outputPanel style="font-size: 25px">Medicamento</p:outputPanel>
+	</ui:define>
+	<ui:define name="conteudo">
+	
+	<div class="ui-g-12 ui-md-12">
+	<h:form id="formMedicamento">
+		<p:commandButton value="Voltar" action="#{medicacaoController.redirecionaMedicacao(medicacaoController.idAnimal)}" process="@this" update="@form" immediate="true"/>
+		<p:messages id="messages" style=" color : red"/>
+	
+	<center>
+	<p:fieldset legend="Cadastro de Novo Medicamento" style = "width: 45%; margin: 0px auto;">
+	<div class = "ui-fluid">
+		<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-widget-header">	
+			<p:outputLabel value="Nome do medicamento" for="medicamento" />
+			<p:inputText id="medicamento" value="#{medicamentoController.medicamento.nome}"/>
+			
+			<p:outputLabel value="Descrição do Medicamentro" for="descricao" />
+			<p:inputText id="descricao" value="#{medicamentoController.medicamento.descricao}"/>
+		</p:panelGrid>	
+		</div>
+		
+		<center>
+		<p:panelGrid columns="1" styleClass="ui-widget-header">
+			<p:commandButton value="Gravar" action="#{medicamentoController.gravar(medicamentoController.medicamento)}" 
+			process="@form" 
+	  		update="@form :formTabelaMedicamentos:tabelaMedicamentos" />
+		</p:panelGrid>
+		</center>
+		
+	</p:fieldset>
+	</center>
+	</h:form>
+	</div>
+	 
+	<h:form id="formTabelaMedicamentos">
+		<p:dataTable id="tabelaMedicamentos" value="#{medicamentoController.medicamentos}" var="varMedicamento" reflow="true" rows="10" paginator="true">
+			<p:column headerText="Nome do Medicamento">
+	  			<p:outputLabel value="#{varMedicamento.nome}"/>
+	  		</p:column>
+	  		
+	  		<p:column headerText="Descrição do Medicamento">
+	  			<p:outputLabel value="#{varMedicamento.descricao}"/>
+	  		</p:column>
+			
+			<p:column headerText="Atualizar">
+				<p:commandLink value="Atualizar" style="color : blue" action="#{medicamentoController.carregar(varMedicamento)}" process="@this" update="@form :formMedicamento"/>			
+			</p:column>
+			
+			<p:column headerText="Remover">
+				<h:commandLink value="Remover" style="color : red" action="#{medicamentoController.remover(varMedicamento)}" process="@this" update="@form"/>			
+			</p:column>
+			
+		</p:dataTable>	
+	</h:form> 
+	
+	</ui:define>
+</ui:composition>
+
+</html>

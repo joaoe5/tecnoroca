@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence 
+	xmlns="http://java.sun.com/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence    
+    					http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+    version="2.0">
+
+    <!-- unidade de persistencia com o nome aula -->
+    <persistence-unit name="aula-mysql">
+
+        <!-- Implementação do JPA, no nosso caso Hibernate -->
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <!-- Aqui são listadas todas as entidades -->
+        <class>tecno.modelo.Animal</class>
+        <class>tecno.modelo.Raca</class>
+        <class>tecno.modelo.Tipo</class>
+        <class>tecno.modelo.Producao</class>
+        <class>tecno.modelo.Produto</class>
+        <class>tecno.modelo.Medicamento</class>
+        <class>tecno.modelo.Medicacao</class>
+        <class>tecno.modelo.Alimento</class>
+        <class>tecno.modelo.Alimentacao</class>
+        <class>tecno.modelo.InseminacaoCio</class>
+        <class>tecno.modelo.Atividades</class>
+        <class>tecno.modelo.Cultura</class>
+        <class>tecno.modelo.Servico</class>
+        <class>tecno.modelo.Usuario</class>
+        <class>tecno.modelo.Funcionalidade</class>
+        <class>tecno.modelo.Grupo</class>
+        
+       
+
+        <properties>    
+            <!-- Propriedades JDBC -->
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />			<!-- Driver -->
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/bd_tecno" />	<!-- Banco -->
+            <property name="javax.persistence.jdbc.user" value="root" />							<!-- Usuário -->
+            <property name="javax.persistence.jdbc.password" value="" />							<!-- Senha -->
+
+            <!-- Configurações específicas do Hibernate -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+            <!-- <property name="hibernate.hbm2ddl.auto" value="create-drop" /> 	 -->
+            <property name="hibernate.hbm2ddl.auto" value="update" /> 	<!-- Criação automatizada -->
+            <property name="hibernate.show_sql" value="true" />			<!-- Mostra SQL -->
+            <property name="hibernate.format_sql" value="true" />		<!-- SQL formatado -->
+        </properties>
+    </persistence-unit>
+</persistence>
